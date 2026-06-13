@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    name: test (node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [16, 18, 20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      # Zero runtime dependencies: no `npm install` needed.
+      - name: Run test suite
+        run: node test/run.js
+
+  smoke:
+    name: CLI smoke test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: --help / --version
+        run: |
+          node bin/agentscan.js --version
+          node bin/agentscan.js --help > /dev/null
+      - name: Scans a fixture and emits valid SARIF
+        run: |
+          mkdir -p /tmp/fix/.openclaw
+          printf '{ gateway: { bind: "lan" }, dmPolicy: "open", version: "3.0.0" }' > /tmp/fix/.openclaw/openclaw.json
+          # A scan with findings exits non-zero by design; don't fail the job on it.
+          node bin/agentscan.js --path /tmp/fix/.openclaw --sarif > out.sarif || true
+          node -e "JSON.parse(require('fs').readFileSync('out.sarif','utf8')); console.log('SARIF is valid JSON')"

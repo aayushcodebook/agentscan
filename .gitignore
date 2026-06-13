@@ -1,0 +1,22 @@
+# agentscan has zero runtime deps; node_modules only appears for tooling.
+node_modules/
+npm-debug.log*
+.npm/
+
+# Local feed cache (also lives in ~/.agentscan by default).
+.agentscan/
+*.sarif
+
+# Editor / OS noise
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Never commit a real agent config or secrets into this repo.
+.env
+*.local
+
+# Private founder/launch + maintainer notes — keep OUT of the public repo.
+GO-TO-MARKET.md
+PUBLISHING.md

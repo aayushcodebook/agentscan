@@ -1,0 +1,122 @@
+{
+  "_comment": "Offline bundle of known-bad OpenClaw/Hermes skills. Entries below are drawn from PUBLIC reporting of the ClawHavoc campaign (Koi Security, Jan–Feb 2026), Snyk's 'clawdhub' analysis, and Trend Micro / Antiy coverage of Atomic macOS Stealer (AMOS) delivery. agentscan ships with this offline copy and can refresh from a remote feed via `agentscan --update-feed`. Matching is by skill name/alias (case-insensitive); families use a representative name plus reported variants as aliases.",
+  "version": "2026-02-16",
+  "source": "agentscan community feed (offline bundle) — ClawHavoc IoCs",
+  "references": [
+    "Koi Security — ClawHavoc (2,857 skills audited; 341 malicious, 335 one campaign)",
+    "Snyk — 'clawdhub' malicious campaign (reverse shells via skills)",
+    "Trend Micro / Antiy — Trojan/OpenClaw.PolySkill, Atomic macOS Stealer (AMOS)"
+  ],
+  "campaign": {
+    "name": "ClawHavoc",
+    "firstSeen": "2026-01-27",
+    "namedBy": "Koi Security (2026-02-01)",
+    "peakMaliciousCount": 824,
+    "registrySizeAtScan": 10700,
+    "primaryPayload": "Atomic macOS Stealer (AMOS)",
+    "classification": "Trojan/OpenClaw.PolySkill (Antiy)",
+    "deliveryTechniques": ["ClickFix paste-to-run", "reverse shell via Python", "staged download", ".env exfiltration to webhook"]
+  },
+  "entries": [
+    {
+      "name": "clawhub",
+      "aliases": ["clawhub1", "clawhubb", "clawhubcli", "clawwhub", "cllawhub", "clawdhub", "clawdhub1", "clawhubcli1"],
+      "category": "supply-chain/typosquat",
+      "note": "ClawHub CLI typosquats (29+ variants reported). ClickFix social engineering that installs Atomic macOS Stealer (AMOS). Removed 2026-02-03; reappeared as renamed variants."
+    },
+    {
+      "name": "auto-updater-agent",
+      "aliases": ["updater", "update", "auto-update", "openclaw-update"],
+      "category": "backdoor",
+      "note": "Fake updater family; staged download pulling extra malware + reverse shell."
+    },
+    {
+      "name": "weather-assistant",
+      "aliases": ["weather-skill", "weather-helper", "weather-buddy"],
+      "category": "credential-theft",
+      "note": "Fake weather skill that steals ~/.clawdbot/.env (OpenClaw API keys) and exfiltrates to an external webhook."
+    },
+    {
+      "name": "polymarket-trader",
+      "aliases": ["polymarket-pro", "polytrading", "polymarket-bot", "polymarket-signals"],
+      "category": "info-stealer",
+      "note": "Polymarket trading-bot lure (34+ skills). Harvests wallets, browser data, and .env via AMOS."
+    },
+    {
+      "name": "solana-wallet",
+      "aliases": ["solana-wallet-tracker", "wallet-tracker", "sol-wallet", "phantom-wallet-helper"],
+      "category": "crypto-drainer",
+      "note": "Cryptocurrency lure (111+ crypto skills in campaign). Targets wallet keys; AMOS payload on macOS."
+    },
+    {
+      "name": "youtube-summarize",
+      "aliases": ["youtube-thumbnail-grabber", "youtube-video-downloader", "yt-summarize", "youtube-transcript"],
+      "category": "info-stealer",
+      "note": "YouTube-utility lure (57+ skills). README/SKILL.md ClickFix prompt drops AMOS."
+    }
+  ],
+  "heuristics": {
+    "_comment": "Calibrated to flag the EXFILTRATION SIGNATURE, not isolated patterns. A skill/plugin is flagged SUSPICIOUS only when it (a) reads a secret AND sends/executes something, or (b) shows an obfuscated-exec / ClickFix combo. A skill merely using process.env is NOT flagged. This trades a few missed-but-subtle cases for far fewer false positives — crying wolf destroys trust faster than a missed detection.",
+    "sensitiveReads": [
+      "process.env",
+      "os.environ",
+      "read_credentials",
+      "read_secrets",
+      "read_env",
+      ".clawdbot/.env",
+      ".openclaw/.env",
+      ".hermes/.env",
+      "/etc/passwd",
+      ".ssh/id_rsa",
+      "id_ed25519",
+      "keychain",
+      "Keychain",
+      "login.keychain",
+      "find-generic-password",
+      "security find-",
+      "cookies.sqlite",
+      "Login Data",
+      "wallet.dat"
+    ],
+    "exfilOrExec": [
+      "fetch('http",
+      "fetch(\"http",
+      "requests.post(",
+      "urllib.request",
+      "curl http",
+      "wget http",
+      "| bash",
+      "| sh",
+      "child_process",
+      "subprocess.",
+      "os.system(",
+      "execSync(",
+      "osascript"
+    ],
+    "exfilSinks": [
+      "discord.com/api/webhooks",
+      "hooks.slack.com",
+      "webhook.site",
+      "pastebin.com",
+      "ngrok.io",
+      "requestbin",
+      "0x0.st",
+      "transfer.sh"
+    ],
+    "obfuscatedExec": [
+      "eval(atob",
+      "atob(",
+      "base64 -d",
+      "base64 --decode",
+      "powershell -enc",
+      "FromBase64String",
+      "exec(Buffer.from"
+    ],
+    "clickfixPhrases": [
+      "paste the following",
+      "run this command",
+      "copy and paste",
+      "curl -fsSL"
+    ]
+  }
+}

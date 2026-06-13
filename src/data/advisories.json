@@ -1,0 +1,50 @@
+{
+  "_comment": "Known security advisories for the agents agentscan scans. Used by the version/CVE check. Drawn from PUBLIC 2026 reporting (SonicWall, SoCRadar, ProArch, jgamblin/OpenClawCVEs, national CERTs). Feed-updatable via `agentscan --update-feed`. OpenClaw uses a DATE-BASED version scheme (YYYY.M.P, e.g. 2026.6.6) — fixedIn ranges below use that scheme so comparisons are meaningful. The check reports UNCERTAIN rather than false-alarming when it can't parse a version.",
+  "version": "2026-06-10",
+  "source": "agentscan advisories (offline bundle)",
+  "advisories": [
+    {
+      "agent": "openclaw",
+      "id": "CVE-2026-25253",
+      "alias": "ClawBleed / ClawJacked",
+      "cvss": 8.8,
+      "severity": "high",
+      "affects": "<2026.1.29",
+      "fixedIn": "2026.1.29",
+      "type": "Cross-site WebSocket hijacking (CSWSH) → auth-token theft → RCE",
+      "summary": "Local WebSocket server did not validate the Origin header; a malicious webpage could connect to localhost, steal the gateway auth token (no rate limiting on local connections), register as a trusted device, and achieve remote code execution.",
+      "references": [
+        { "id": "CVE-2026-25253", "url": "https://www.sonicwall.com/blog/openclaw-auth-token-theft-leading-to-rce-cve-2026-25253" },
+        { "id": "SoCRadar", "url": "https://socradar.io/blog/cve-2026-25253-rce-openclaw-auth-token/" }
+      ]
+    },
+    {
+      "agent": "openclaw",
+      "id": "CVE-2026-32922",
+      "alias": "token-rotation race",
+      "cvss": 9.9,
+      "severity": "critical",
+      "affects": "<2026.3.4",
+      "fixedIn": "2026.3.4",
+      "type": "Privilege escalation → RCE",
+      "summary": "A token rotation race condition let any legitimately paired device escalate to full admin access and achieve remote code execution.",
+      "references": [
+        { "id": "CVE-2026-32922", "url": "https://managemyclaw.com/blog/openclaw-cve-tracker/" }
+      ]
+    },
+    {
+      "agent": "openclaw",
+      "id": "GHSA-openclaw-rce-band",
+      "alias": "RCE cluster",
+      "cvss": 7.3,
+      "severity": "high",
+      "affects": "<2026.2.0",
+      "fixedIn": "2026.2.0",
+      "type": "Remote code execution",
+      "summary": "Cluster of three RCE issues in the 7.1–7.3 CVSS band reported across 2026; upgrade to a patched release.",
+      "references": [
+        { "id": "OpenClawCVEs", "url": "https://github.com/jgamblin/OpenClawCVEs/" }
+      ]
+    }
+  ]
+}

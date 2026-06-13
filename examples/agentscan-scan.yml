@@ -1,0 +1,46 @@
+# Example workflow for YOUR environment — copy into .github/workflows/ in the
+# repo (or self-hosted runner) where your OpenClaw/Hermes agent lives.
+#
+# It runs agentscan, uploads the results to GitHub code scanning (Security tab),
+# and — optionally — fails the job if the posture grade drops below a threshold.
+#
+# NOTE: scanning is only meaningful on the machine where the agent is actually
+# installed. A throwaway cloud runner has no agent, so point --path at a real
+# install, or run this on a self-hosted runner on the agent host.
+
+name: agentscan
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 7 * * 1"   # weekly, Monday 07:00 UTC
+
+permissions:
+  security-events: write   # required to upload SARIF
+  contents: read
+
+jobs:
+  scan:
+    runs-on: self-hosted   # the host where your agent runs
+    steps:
+      - name: Refresh feeds (blocklist + CVE advisories)
+        run: npx agentscan@latest --update-feed || true
+
+      - name: Scan the agent and emit SARIF
+        # A scan with findings exits non-zero by design; capture results instead
+        # of failing here so the SARIF still uploads.
+        run: npx agentscan@latest --path "$HOME/.openclaw" --sarif > agentscan.sarif || true
+
+      - name: Upload to GitHub code scanning
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: agentscan.sarif
+          category: agentscan
+
+      # Optional gate: fail the run on any critical finding.
+      - name: Fail on critical findings
+        run: |
+          npx agentscan@latest --path "$HOME/.openclaw" --quiet
+          code=$?
+          if [ "$code" -ge 2 ]; then
+            echo "::error::agentscan found critical issues"; exit 1
+          fi
