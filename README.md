@@ -6,7 +6,9 @@
 https://github.com/user-attachments/assets/422a90a9-3ce1-4071-8ce9-38c10cf77238
 
 
-<img width="2874" height="1796" alt="demo" src="https://github.com/user-attachments/assets/e80e4852-c3d8-4c8e-a497-1648c3dd0c41" />
+<img width="2874" height="1796" 
+  
+  alt="demo" src="https://github.com/user-attachments/assets/e80e4852-c3d8-4c8e-a497-1648c3dd0c41" />
 
 
 Most agent-security tools scan one skill, for one agent, before you install it.
