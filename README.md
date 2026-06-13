@@ -18,7 +18,7 @@ grades **B** with specific, actionable findings and **zero false alarms** (incl.
 across 300+ real bundled skills).
 
 ```bash
-npx agentscan
+npx @aayushcodebook/agentscan
 ```
 
 ```
@@ -85,7 +85,7 @@ grade or a new fail), comparing against the last run:
 
 ```bash
 # crontab -e  →  scan at 8am daily; alert only if the grade/score regresses
-0 8 * * * cur=$(npx agentscan@latest --quiet 2>/dev/null); prev=$(cat ~/.agentscan/last 2>/dev/null); \
+0 8 * * * cur=$(npx @aayushcodebook/agentscan@latest --quiet 2>/dev/null); prev=$(cat ~/.agentscan/last 2>/dev/null); \
   echo "$cur" > ~/.agentscan/last; [ "$cur" != "$prev" ] && \
   printf '%s\n' "$cur" | grep -qE 'AT RISK|fail' && \
   osascript -e "display notification \"$cur\" with title \"agentscan\"" 2>/dev/null || true
@@ -118,13 +118,13 @@ config-hardening details agentscan doesn't.
 ## Usage
 
 ```bash
-npx agentscan                      # scan auto-detected installs
-npx agentscan --path ~/my-agent    # also scan a custom location (repeatable)
-npx agentscan --json               # full findings + score + framework tags (JSON)
-npx agentscan --sarif              # SARIF 2.1.0 for GitHub code scanning / CI
-npx agentscan --quiet              # one-line graded verdict
-npx agentscan --update-feed        # refresh blocklist + CVE advisory feeds
-npx agentscan --help
+npx @aayushcodebook/agentscan                      # scan auto-detected installs
+npx @aayushcodebook/agentscan --path ~/my-agent    # also scan a custom location (repeatable)
+npx @aayushcodebook/agentscan --json               # full findings + score + framework tags (JSON)
+npx @aayushcodebook/agentscan --sarif              # SARIF 2.1.0 for GitHub code scanning / CI
+npx @aayushcodebook/agentscan --quiet              # one-line graded verdict
+npx @aayushcodebook/agentscan --update-feed        # refresh blocklist + CVE advisory feeds
+npx @aayushcodebook/agentscan --help
 ```
 
 ### Exit codes
@@ -136,7 +136,7 @@ npx agentscan --help
 | `2` | critical issues — fix now |
 | `3` | scanner error |
 
-Useful in CI: `npx agentscan --quiet || echo "agent needs attention"`.
+Useful in CI: `npx @aayushcodebook/agentscan --quiet || echo "agent needs attention"`.
 
 ## Privacy
 

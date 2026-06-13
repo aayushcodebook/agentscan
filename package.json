@@ -1,5 +1,5 @@
 {
-  "name": "agentscan",
+  "name": "@aayushcodebook/agentscan",
   "version": "0.1.0",
   "description": "Cross-agent security posture scanner for self-hosted AI agents (OpenClaw, Hermes). 19 checks across exposure, gateway auth, secrets, CVEs, and malicious skills (taint + prompt-injection analysis) — graded A–F, mapped to CWE/OWASP-LLM/MITRE ATLAS. Zero dependencies, runs 100% locally.",
   "bin": {
