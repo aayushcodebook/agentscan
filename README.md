@@ -3,6 +3,10 @@
 **The cross-agent security posture scanner for self-hosted AI agents.**
 
 
+<img width="2874" height="1796" alt="demo" src="https://github.com/user-attachments/assets/4f651ed4-b07d-43f8-b52d-5cbe63af209f" />
+
+
+
 https://github.com/user-attachments/assets/422a90a9-3ce1-4071-8ce9-38c10cf77238
 
 
